@@ -38,7 +38,7 @@
 #include <array>
 #include <cstddef>
 
-#ifdef NXCOMMON_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
 #include <tbb/blocked_range2d.h>
 #endif
 namespace NX::Common
@@ -55,11 +55,23 @@ namespace NX::Common
 class NXCOMMON_EXPORT NXRange2D
 {
 public:
-  using RangeType = std::array<size_t, 4>; // { init row, init col, final row, final col }
+  /**
+   * @brief The 4 values are stored in the order of Col Start, Col End, Row Start, Row End
+   * with the assumption that the ordering of the data is Column moving the fastest
+   * then the Rows.
+   */
+  using RangeType = std::array<size_t, 4>; // {  Col Start, Col End, Row Start, Row End }
 
   NXRange2D();
-  NXRange2D(size_t initRow, size_t initCol, size_t endRow, size_t endCol);
-#ifdef NXCOMMON_ENABLE_MULTICORE
+  /**
+   * @brief Creates a 2D Range where X is the fastest moving axis, and then Y
+   * @param colStart Starting Colum Index
+   * @param colEnd Ending Column Index (non inclusive)
+   * @param rowStart Starting Row Index
+   * @param rowEnd Ending row index (non inclusive)
+   */
+  NXRange2D(size_t colStart, size_t colEnd, size_t rowStart, size_t rowEnd);
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
   NXRange2D(const tbb::blocked_range2d<size_t, size_t>& r);
 #endif
 

@@ -35,7 +35,7 @@
 
 #include "NXCommon/NXCommon_export.hpp "
 
-#ifdef NXCOMMON_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
 #include <tbb/blocked_range.h>
 #endif
 
@@ -60,7 +60,7 @@ public:
 
   NXRange();
   NXRange(size_t begin, size_t end);
-#ifdef NXCOMMON_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
   NXRange(const tbb::blocked_range<size_t>& r);
 #endif
 

@@ -60,7 +60,7 @@ NXRange3D::NXRange3D(size_t xMin, size_t xMax, size_t yMin, size_t yMax, size_t 
 {
 }
 
-#ifdef NX_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------

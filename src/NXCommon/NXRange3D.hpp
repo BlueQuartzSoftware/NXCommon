@@ -38,7 +38,7 @@
 #include <array>
 #include <cstddef>
 
-#ifdef NXCOMMON_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
 #include <tbb/blocked_range3d.h>
 #endif
 namespace NX::Common
@@ -62,7 +62,7 @@ public:
   NXRange3D();
   NXRange3D(size_t x, size_t y, size_t z);
   NXRange3D(size_t xMin, size_t xMax, size_t yMin, size_t yMax, size_t zMin, size_t zMax);
-#ifdef NXCOMMON_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
   NXRange3D(const tbb::blocked_range3d<size_t>& r);
 #endif
 

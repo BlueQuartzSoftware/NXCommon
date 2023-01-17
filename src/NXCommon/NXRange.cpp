@@ -52,7 +52,7 @@ NXRange::NXRange(size_t begin, size_t end)
 {
 }
 
-#ifdef NXCOMMON_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
