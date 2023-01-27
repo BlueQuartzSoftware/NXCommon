@@ -33,7 +33,7 @@
 
 #pragma once
 
-#include "NXCommon/NXCommon_export.hpp"
+#include "NX/Common/NXCommon_export.hpp"
 
 #include <array>
 #include <cstddef>

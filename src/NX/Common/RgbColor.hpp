@@ -3,8 +3,8 @@
 #include <iostream>
 #include <tuple>
 
-#include "NXCommon/NXCommon_export.hpp "
-#include "NXCommon/Types.hpp"
+#include "NX/Common/NXCommon_export.hpp "
+#include "NX/Common/Types.hpp"
 
 namespace NX::Common
 {

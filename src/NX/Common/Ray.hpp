@@ -2,8 +2,8 @@
 
 #include <stdexcept>
 
-#include "NXCommon/EulerAngle.hpp"
-#include "NXCommon/Point3D.hpp"
+#include "NX/Common/EulerAngle.hpp"
+#include "NX/Common/Point3D.hpp"
 
 namespace NX::Common
 {

@@ -31,86 +31,89 @@
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "NXCommon/NXRange2D.hpp"
+#include "NX/Common/NXRange.hpp"
 
 #include <stdexcept>
 using namespace NX::Common;
+
 // -----------------------------------------------------------------------------
-NXRange2D::NXRange2D()
-: m_Range({{0, 0, 0, 0}})
+//
+// -----------------------------------------------------------------------------
+NXRange::NXRange()
+: m_Range({{0, 0}})
 {
 }
 
 // -----------------------------------------------------------------------------
-NXRange2D::NXRange2D(size_t colStart, size_t colEnd, size_t rowStart, size_t rowEnd)
-: m_Range({{colStart, colEnd, rowStart, rowEnd}})
+//
+// -----------------------------------------------------------------------------
+NXRange::NXRange(size_t begin, size_t end)
+: m_Range({{begin, end}})
 {
 }
 
-#ifdef NXCOMMON_ENABLE_MULTICORE
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
 // -----------------------------------------------------------------------------
-NXRange2D::NXRange2D(const tbb::blocked_range2d<size_t, size_t>& r)
-: m_Range({{r.rows().begin(), r.cols().begin(), r.rows().end(), r.cols().end()}})
+//
+// -----------------------------------------------------------------------------
+NXRange::NXRange(const tbb::blocked_range<size_t>& r)
+: m_Range({{r.begin(), r.end()}})
 {
 }
 #endif
 
 // -----------------------------------------------------------------------------
-size_t NXRange2D::minRow() const
+//
+// -----------------------------------------------------------------------------
+NXRange::RangeType NXRange::getRange() const
 {
-  return m_Range[2];
+  return m_Range;
 }
 
 // -----------------------------------------------------------------------------
-size_t NXRange2D::minCol() const
+//
+// -----------------------------------------------------------------------------
+size_t NXRange::min() const
 {
   return m_Range[0];
 }
 
 // -----------------------------------------------------------------------------
-size_t NXRange2D::maxRow() const
-{
-  return m_Range[3];
-}
-
+//
 // -----------------------------------------------------------------------------
-size_t NXRange2D::maxCol() const
+size_t NXRange::max() const
 {
   return m_Range[1];
 }
 
 // -----------------------------------------------------------------------------
-size_t NXRange2D::numRows() const
+//
+// -----------------------------------------------------------------------------
+size_t NXRange::size() const
 {
-  return maxRow() - minRow();
+  return m_Range[1] - m_Range[0];
 }
 
 // -----------------------------------------------------------------------------
-size_t NXRange2D::numCols() const
+//
+// -----------------------------------------------------------------------------
+bool NXRange::empty() const
 {
-  return maxCol() - minCol();
+  return size() == 0;
 }
 
 // -----------------------------------------------------------------------------
-size_t NXRange2D::size() const
-{
-  return numRows() * numCols();
-}
-
+//
 // -----------------------------------------------------------------------------
-bool NXRange2D::empty() const
+size_t NXRange::operator[](size_t index) const
 {
-  const bool emptyRows = (m_Range[2] == m_Range[3]) && (m_Range[2] == 0);
-  const bool emptyCols = (m_Range[0] == m_Range[1]) && (m_Range[0] == 0);
-  return emptyRows && emptyCols;
-}
-
-// -----------------------------------------------------------------------------
-size_t NXRange2D::operator[](size_t index) const
-{
-  if(index < 4)
+  switch(index)
   {
-    return m_Range[index];
+  case 0:
+    return min();
+  case 1:
+    return max();
+  default:
+    throw std::range_error("Range must be 0 or 1");
   }
-  throw std::range_error("Range out of bounds");
 }

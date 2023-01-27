@@ -13,25 +13,7 @@
       "name": "expected-lite"
     },
     {
-      "name": "eigen3"
-    },
-    {
-      "name": "ebsdlib"
-    },
-    {
-      "name": "hdf5",
-      "features": [
-        "cpp"
-      ]
-    },
-    {
       "name": "span-lite"
-    },
-    {
-      "name": "boost-mp11"
-    },
-    {
-      "name": "nod"
     }
   ],
   "features": {
@@ -57,14 +39,6 @@
       "dependencies": [
         {
           "name": "tbb"
-        }
-      ]
-    },
-    "itk": {
-      "description": "ITK",
-      "dependencies": [
-        {
-          "name": "itk"
         }
       ]
     }

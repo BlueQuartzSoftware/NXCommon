@@ -3,7 +3,7 @@
 #include <cstring>
 #include <type_traits>
 
-#include "NXCommon/Types.hpp"
+#include "NX/Common/Types.hpp"
 
 #ifdef _WIN32
 #define COMPLEX_BYTE_ORDER little

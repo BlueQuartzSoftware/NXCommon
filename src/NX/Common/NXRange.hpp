@@ -33,46 +33,35 @@
 
 #pragma once
 
-#include "NXCommon/NXCommon_export.hpp "
+#include "NX/Common/NXCommon_export.hpp"
+
+#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
+#include <tbb/blocked_range.h>
+#endif
 
 #include <array>
 #include <cstddef>
 
-#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
-#include <tbb/blocked_range2d.h>
-#endif
 namespace NX::Common
 {
 /**
- * @class NXRange2D NXRange2D.h SIMPLib/Common/NXRange2D.h
- * @brief The NXRange2D class defines a range between set of minimum and
+ * @class NXRange NXRange.h complex/Common/NXRange.h
+ * @brief The NXRange class defines a range between set of minimum and
  * maximum values. The purpose of this class is mainly to allow a more unified
  * control flow during parallelization between builds using TBB and those that
  * do not.  Because tbb::blocked_range is used in an implicit conversion constructor,
  * a single operator accepting a NXRange can be used TBB parallelized and
  * non-paralleled versions without a branching code base.
  */
-class NXCOMMON_EXPORT NXRange2D
+class NXCOMMON_EXPORT NXRange
 {
 public:
-  /**
-   * @brief The 4 values are stored in the order of Col Start, Col End, Row Start, Row End
-   * with the assumption that the ordering of the data is Column moving the fastest
-   * then the Rows.
-   */
-  using RangeType = std::array<size_t, 4>; // {  Col Start, Col End, Row Start, Row End }
+  using RangeType = std::array<size_t, 2>;
 
-  NXRange2D();
-  /**
-   * @brief Creates a 2D Range where X is the fastest moving axis, and then Y
-   * @param colStart Starting Colum Index
-   * @param colEnd Ending Column Index (non inclusive)
-   * @param rowStart Starting Row Index
-   * @param rowEnd Ending row index (non inclusive)
-   */
-  NXRange2D(size_t colStart, size_t colEnd, size_t rowStart, size_t rowEnd);
+  NXRange();
+  NXRange(size_t begin, size_t end);
 #if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
-  NXRange2D(const tbb::blocked_range2d<size_t, size_t>& r);
+  NXRange(const tbb::blocked_range<size_t>& r);
 #endif
 
   /**
@@ -82,40 +71,16 @@ public:
   RangeType getRange() const;
 
   /**
-   * @brief Returns the minimum row index in the range.
+   * @brief Returns the minimum index in the range.
    * @return
    */
-  size_t minRow() const;
+  size_t min() const;
 
   /**
-   * @brief Returns the minimum column index in the range.
+   * @brief Returns the maximum index in the range.
    * @return
    */
-  size_t minCol() const;
-
-  /**
-   * @brief Returns the maximum row index in the range.
-   * @return
-   */
-  size_t maxRow() const;
-
-  /**
-   * @brief Returns the maximum column index in the range.
-   * @return
-   */
-  size_t maxCol() const;
-
-  /**
-   * @brief Returns the number of rows in the range.
-   * @return
-   */
-  size_t numRows() const;
-
-  /**
-   * @brief Returns the number of columns in the range.
-   * @return
-   */
-  size_t numCols() const;
+  size_t max() const;
 
   /**
    * @brief Returns the number of indices in the range.

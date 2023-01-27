@@ -1,13 +1,12 @@
 #pragma once
 
-#include "NXCommon/Bit.hpp"
-#include "NXCommon/NXCommon_export.hpp"
-#include "NXCommon/Types.hpp"
+#include "NX/Common/Bit.hpp"
+#include "NX/Common/NXCommon_export.hpp"
+#include "NX/Common/Types.hpp"
 
 #include <fmt/core.h>
 
 #include <array>
-#include <functional>
 #include <optional>
 #include <string_view>
 

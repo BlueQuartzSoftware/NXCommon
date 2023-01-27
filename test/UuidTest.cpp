@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 
-#include "NXCommon/StringLiteral.hpp"
-#include "NXCommon/Uuid.hpp"
+#include "NX/Common/StringLiteral.hpp"
+#include "NX/Common/Uuid.hpp"
 
 using namespace NX;
 using namespace NX::Common;

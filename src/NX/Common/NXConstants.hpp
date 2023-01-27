@@ -1,7 +1,7 @@
 #pragma once
 
-#include "NXCommon/Numbers.hpp"
-#include "NXCommon/StringLiteral.hpp"
+#include "NX/Common/Numbers.hpp"
+#include "NX/Common/StringLiteral.hpp"
 
 #define COMPLEX_DEF_STRING_CONSTANT(name) StringLiteral k_##name = #name
 

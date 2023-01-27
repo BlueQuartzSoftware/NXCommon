@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "NXCommon/Bit.hpp"
+#include "NX/Common/Bit.hpp"
 
 using namespace NX;
 using namespace NX::Common;

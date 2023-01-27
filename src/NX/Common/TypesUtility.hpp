@@ -1,8 +1,8 @@
 #pragma once
 
-#include "NXCommon/StringLiteral.hpp"
-#include "NXCommon/TypeTraits.hpp"
-#include "NXCommon/Types.hpp"
+#include "NX/Common/StringLiteral.hpp"
+#include "NX/Common/TypeTraits.hpp"
+#include "NX/Common/Types.hpp"
 
 #include <optional>
 #include <stdexcept>

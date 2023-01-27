@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "NXCommon/Point3D.hpp"
+#include "NX/Common/Point3D.hpp"
 
 namespace NX::Common
 {

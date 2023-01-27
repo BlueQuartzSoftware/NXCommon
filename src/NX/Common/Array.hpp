@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NXCommon/Types.hpp"
+#include "NX/Common/Types.hpp"
 
 #include <array>
 #include <cassert>
