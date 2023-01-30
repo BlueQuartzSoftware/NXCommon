@@ -199,7 +199,7 @@ if(NXCOMMON_ENABLE_INSTALL)
 
   include(CMakePackageConfigHelpers)
 
-  set(NXCOMMON_INSTALL_CMAKE_PREFIX "lib/cmake")
+  set(NXCOMMON_INSTALL_CMAKE_PREFIX "lib/cmake" CACHE STRING "Relative path to install NXCommonConfig.cmake in")
 
   set(NXCOMMON_CONFIG_FILE ${NXCommon_BINARY_DIR}/NXCommonConfig.cmake)
   set(NXCOMMON_VERSION_FILE ${NXCommon_BINARY_DIR}/NXCommonConfigVersion.cmake)
@@ -247,6 +247,9 @@ if(NXCOMMON_ENABLE_INSTALL)
     COMPONENT develop
     BASE_DIR ${NXCOMMON_GENERATED_HEADER_DIR}
   )
+
+  # Install the LICENSE.txt as copyright to make VCPKG happy
+  install(FILES ${NXCommon_SOURCE_DIR}/LICENSE.md DESTINATION ${NXCOMMON_INSTALL_CMAKE_PREFIX} RENAME copyright)
 endif()
 
 option(NXCOMMON_ENABLE_PACKAGING "Enables NX::Common packaging" ON)
