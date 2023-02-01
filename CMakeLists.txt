@@ -125,6 +125,9 @@ set(NXCOMMON_HDRS
   ${NXCOMMON_SOURCE_DIR}/Numbers.hpp
   ${NXCOMMON_SOURCE_DIR}/Point2D.hpp
   ${NXCOMMON_SOURCE_DIR}/Point3D.hpp
+  ${NXCOMMON_SOURCE_DIR}/Range.hpp
+  ${NXCOMMON_SOURCE_DIR}/Range2D.hpp
+  ${NXCOMMON_SOURCE_DIR}/Range3D.hpp
   ${NXCOMMON_SOURCE_DIR}/Ray.hpp
   ${NXCOMMON_SOURCE_DIR}/Result.hpp
   ${NXCOMMON_SOURCE_DIR}/RgbColor.hpp
@@ -134,10 +137,6 @@ set(NXCOMMON_HDRS
   ${NXCOMMON_SOURCE_DIR}/Types.hpp
   ${NXCOMMON_SOURCE_DIR}/TypesUtility.hpp
   ${NXCOMMON_SOURCE_DIR}/Uuid.hpp
-
-  ${NXCOMMON_SOURCE_DIR}/NXRange.hpp
-  ${NXCOMMON_SOURCE_DIR}/NXRange2D.hpp
-  ${NXCOMMON_SOURCE_DIR}/NXRange3D.hpp
 )
 
 set(NXCOMMON_GENERATED_HEADERS
@@ -145,22 +144,12 @@ set(NXCOMMON_GENERATED_HEADERS
 )
 
 set(NXCOMMON_SRCS
+  ${NXCOMMON_SOURCE_DIR}/Range.cpp
+  ${NXCOMMON_SOURCE_DIR}/Range2D.cpp
+  ${NXCOMMON_SOURCE_DIR}/Range3D.cpp
   ${NXCOMMON_SOURCE_DIR}/RgbColor.cpp
-  ${NXCOMMON_SOURCE_DIR}/NXRange.cpp
-  ${NXCOMMON_SOURCE_DIR}/NXRange2D.cpp
-  ${NXCOMMON_SOURCE_DIR}/NXRange3D.cpp
   ${NXCOMMON_SOURCE_DIR}/Uuid.cpp
 )
-
-# Add Core FilterParameters
-foreach(param ${CoreParameters})
-  list(APPEND NXCOMMON_HDRS
-    "${NXCOMMON_SOURCE_DIR}/Parameters/${param}.hpp"
-  )
-  list(APPEND NXCOMMON_SRCS
-    "${NXCOMMON_SOURCE_DIR}/Parameters/${param}.cpp"
-  )
-endforeach()
 
 set(NXCOMMON_ALL_HDRS
   ${NXCOMMON_HDRS}

@@ -31,94 +31,86 @@
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "NX/Common/NXRange3D.hpp"
+#include "NX/Common/Range2D.hpp"
 
 #include <stdexcept>
-
 using namespace NX::Common;
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::NXRange3D()
-: m_Range({{0, 0, 0, 0, 0, 0}})
+Range2D::Range2D()
+: m_Range({{0, 0, 0, 0}})
 {
 }
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::NXRange3D(size_t x, size_t y, size_t z)
-: m_Range({{0, x, 0, y, 0, z}})
+Range2D::Range2D(size_t colStart, size_t colEnd, size_t rowStart, size_t rowEnd)
+: m_Range({{colStart, colEnd, rowStart, rowEnd}})
 {
 }
 
+#ifdef NXCOMMON_ENABLE_MULTICORE
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::NXRange3D(size_t xMin, size_t xMax, size_t yMin, size_t yMax, size_t zMin, size_t zMax)
-: m_Range({{xMin, xMax, yMin, yMax, zMin, zMax}})
-{
-}
-
-#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
-// -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::NXRange3D(const tbb::blocked_range3d<size_t>& r)
-: m_Range({{r.pages().begin(), r.pages().end(), r.rows().begin(), r.rows().end(), r.cols().begin(), r.cols().end()}})
+Range2D::Range2D(const tbb::blocked_range2d<size_t, size_t>& r)
+: m_Range({{r.rows().begin(), r.cols().begin(), r.rows().end(), r.cols().end()}})
 {
 }
 #endif
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::RangeType NXRange3D::getRange() const
+size_t Range2D::minRow() const
 {
-  return m_Range;
+  return m_Range[2];
 }
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::DimensionRange NXRange3D::getXRange() const
+size_t Range2D::minCol() const
 {
-  return {{m_Range[0], m_Range[1]}};
+  return m_Range[0];
 }
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::DimensionRange NXRange3D::getYRange() const
+size_t Range2D::maxRow() const
 {
-  return {{m_Range[2], m_Range[3]}};
+  return m_Range[3];
 }
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-NXRange3D::DimensionRange NXRange3D::getZRange() const
+size_t Range2D::maxCol() const
 {
-  return {{m_Range[4], m_Range[5]}};
+  return m_Range[1];
 }
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-bool NXRange3D::empty() const
+size_t Range2D::numRows() const
 {
-  return (m_Range[0] == m_Range[1]) && (m_Range[2] == m_Range[3]) && (m_Range[4] == m_Range[5]);
+  return maxRow() - minRow();
 }
 
 // -----------------------------------------------------------------------------
-//
-// -----------------------------------------------------------------------------
-size_t NXRange3D::operator[](size_t index) const
+size_t Range2D::numCols() const
 {
-  if(index < 6)
+  return maxCol() - minCol();
+}
+
+// -----------------------------------------------------------------------------
+size_t Range2D::size() const
+{
+  return numRows() * numCols();
+}
+
+// -----------------------------------------------------------------------------
+bool Range2D::empty() const
+{
+  const bool emptyRows = (m_Range[2] == m_Range[3]) && (m_Range[2] == 0);
+  const bool emptyCols = (m_Range[0] == m_Range[1]) && (m_Range[0] == 0);
+  return emptyRows && emptyCols;
+}
+
+// -----------------------------------------------------------------------------
+size_t Range2D::operator[](size_t index) const
+{
+  if(index < 4)
   {
     return m_Range[index];
   }
-
-  throw std::range_error("Range must be 0 or 1");
+  throw std::range_error("Range out of bounds");
 }

@@ -31,33 +31,41 @@
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-#include "NX/Common/NXRange.hpp"
+#include "NX/Common/Range3D.hpp"
 
 #include <stdexcept>
+
 using namespace NX::Common;
-
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-NXRange::NXRange()
-: m_Range({{0, 0}})
+Range3D::Range3D()
+: m_Range({{0, 0, 0, 0, 0, 0}})
 {
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-NXRange::NXRange(size_t begin, size_t end)
-: m_Range({{begin, end}})
+Range3D::Range3D(size_t x, size_t y, size_t z)
+: m_Range({{0, x, 0, y, 0, z}})
 {
 }
 
-#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-NXRange::NXRange(const tbb::blocked_range<size_t>& r)
-: m_Range({{r.begin(), r.end()}})
+Range3D::Range3D(size_t xMin, size_t xMax, size_t yMin, size_t yMax, size_t zMin, size_t zMax)
+: m_Range({{xMin, xMax, yMin, yMax, zMin, zMax}})
+{
+}
+
+#ifdef NXCOMMON_ENABLE_MULTICORE
+// -----------------------------------------------------------------------------
+//
+// -----------------------------------------------------------------------------
+Range3D::Range3D(const tbb::blocked_range3d<size_t>& r)
+: m_Range({{r.pages().begin(), r.pages().end(), r.rows().begin(), r.rows().end(), r.cols().begin(), r.cols().end()}})
 {
 }
 #endif
@@ -65,7 +73,7 @@ NXRange::NXRange(const tbb::blocked_range<size_t>& r)
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-NXRange::RangeType NXRange::getRange() const
+Range3D::RangeType Range3D::getRange() const
 {
   return m_Range;
 }
@@ -73,47 +81,44 @@ NXRange::RangeType NXRange::getRange() const
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-size_t NXRange::min() const
+Range3D::DimensionRange Range3D::getXRange() const
 {
-  return m_Range[0];
+  return {{m_Range[0], m_Range[1]}};
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-size_t NXRange::max() const
+Range3D::DimensionRange Range3D::getYRange() const
 {
-  return m_Range[1];
+  return {{m_Range[2], m_Range[3]}};
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-size_t NXRange::size() const
+Range3D::DimensionRange Range3D::getZRange() const
 {
-  return m_Range[1] - m_Range[0];
+  return {{m_Range[4], m_Range[5]}};
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-bool NXRange::empty() const
+bool Range3D::empty() const
 {
-  return size() == 0;
+  return (m_Range[0] == m_Range[1]) && (m_Range[2] == m_Range[3]) && (m_Range[4] == m_Range[5]);
 }
 
 // -----------------------------------------------------------------------------
 //
 // -----------------------------------------------------------------------------
-size_t NXRange::operator[](size_t index) const
+size_t Range3D::operator[](size_t index) const
 {
-  switch(index)
+  if(index < 6)
   {
-  case 0:
-    return min();
-  case 1:
-    return max();
-  default:
-    throw std::range_error("Range must be 0 or 1");
+    return m_Range[index];
   }
+
+  throw std::range_error("Range must be 0 or 1");
 }

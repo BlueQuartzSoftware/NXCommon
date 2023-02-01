@@ -3,7 +3,7 @@
 #include <iostream>
 #include <tuple>
 
-#include "NX/Common/NXCommon_export.hpp "
+#include "NX/Common/NXCommon_export.hpp"
 #include "NX/Common/Types.hpp"
 
 namespace NX::Common
@@ -43,7 +43,7 @@ Component NXCOMMON_EXPORT dRed(NX::Common::Rgba rgb);
 Component NXCOMMON_EXPORT dGreen(NX::Common::Rgba rgb);
 
 /**
- * @brief Returns the integrer representation of the blue component.
+ * @brief Returns the integer representation of the blue component.
  * @param rgb
  * @return uint8
  */

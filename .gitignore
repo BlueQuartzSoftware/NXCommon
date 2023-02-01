@@ -28,3 +28,5 @@ CMakeLists.txt.*
 test_data/
 CMakeUserPresets.json
 Workspace
+/cmake-build-debug/
+/cmake-build-release/

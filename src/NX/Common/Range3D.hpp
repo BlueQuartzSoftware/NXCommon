@@ -35,33 +35,35 @@
 
 #include "NX/Common/NXCommon_export.hpp"
 
-#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
-#include <tbb/blocked_range.h>
-#endif
-
 #include <array>
 #include <cstddef>
 
+#ifdef NXCOMMON_ENABLE_MULTICORE
+#include <tbb/blocked_range3d.h>
+#endif
 namespace NX::Common
 {
+
 /**
- * @class NXRange NXRange.h complex/Common/NXRange.h
- * @brief The NXRange class defines a range between set of minimum and
+ * @class Range3D Range3D.h SIMPLib/Common/Range3D.h
+ * @brief The Range3D class defines a range between set of minimum and
  * maximum values. The purpose of this class is mainly to allow a more unified
  * control flow during parallelization between builds using TBB and those that
  * do not.  Because tbb::blocked_range is used in an implicit conversion constructor,
- * a single operator accepting a NXRange can be used TBB parallelized and
+ * a single operator accepting a Range can be used TBB parallelized and
  * non-paralleled versions without a branching code base.
  */
-class NXCOMMON_EXPORT NXRange
+class NXCOMMON_EXPORT Range3D
 {
 public:
-  using RangeType = std::array<size_t, 2>;
+  using RangeType = std::array<size_t, 6>;
+  using DimensionRange = std::array<size_t, 2>;
 
-  NXRange();
-  NXRange(size_t begin, size_t end);
-#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
-  NXRange(const tbb::blocked_range<size_t>& r);
+  Range3D();
+  Range3D(size_t x, size_t y, size_t z);
+  Range3D(size_t xMin, size_t xMax, size_t yMin, size_t yMax, size_t zMin, size_t zMax);
+#ifdef NXCOMMON_ENABLE_MULTICORE
+  Range3D(const tbb::blocked_range3d<size_t>& r);
 #endif
 
   /**
@@ -71,22 +73,22 @@ public:
   RangeType getRange() const;
 
   /**
-   * @brief Returns the minimum index in the range.
+   * @brief Returns the range along the X dimension
    * @return
    */
-  size_t min() const;
+  DimensionRange getXRange() const;
 
   /**
-   * @brief Returns the maximum index in the range.
+   * @brief Returns the range along the Y dimension
    * @return
    */
-  size_t max() const;
+  DimensionRange getYRange() const;
 
   /**
-   * @brief Returns the number of indices in the range.
+   * @brief Returns the range along the Z dimension
    * @return
    */
-  size_t size() const;
+  DimensionRange getZRange() const;
 
   /**
    * @brief Returns true if the range is empty.  Returns false otherwise.
@@ -95,8 +97,10 @@ public:
   bool empty() const;
 
   /**
-   * @brief Returns the range based on the specified index.  The range is
-   * organized as [min, max]
+   * @brief Returns the specified part of the range.  The range is organized as
+   * [xMin, xMax, yMin, yMax, zMin, zMax].
+   * @param index
+   * @return
    */
   size_t operator[](size_t index) const;
 

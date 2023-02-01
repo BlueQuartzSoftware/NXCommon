@@ -39,31 +39,40 @@
 #include <cstddef>
 
 #if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
-#include <tbb/blocked_range3d.h>
+#include <tbb/blocked_range2d.h>
 #endif
 namespace NX::Common
 {
-
 /**
- * @class NXRange3D NXRange3D.h SIMPLib/Common/NXRange3D.h
- * @brief The NXRange3D class defines a range between set of minimum and
+ * @class Range2D Range2D.h SIMPLib/Common/Range2D.h
+ * @brief The Range2D class defines a range between set of minimum and
  * maximum values. The purpose of this class is mainly to allow a more unified
  * control flow during parallelization between builds using TBB and those that
  * do not.  Because tbb::blocked_range is used in an implicit conversion constructor,
- * a single operator accepting a NXRange can be used TBB parallelized and
+ * a single operator accepting a Range can be used TBB parallelized and
  * non-paralleled versions without a branching code base.
  */
-class NXCOMMON_EXPORT NXRange3D
+class NXCOMMON_EXPORT Range2D
 {
 public:
-  using RangeType = std::array<size_t, 6>;
-  using DimensionRange = std::array<size_t, 2>;
+  /**
+   * @brief The 4 values are stored in the order of Col Start, Col End, Row Start, Row End
+   * with the assumption that the ordering of the data is Column moving the fastest
+   * then the Rows.
+   */
+  using RangeType = std::array<size_t, 4>; // {  Col Start, Col End, Row Start, Row End }
 
-  NXRange3D();
-  NXRange3D(size_t x, size_t y, size_t z);
-  NXRange3D(size_t xMin, size_t xMax, size_t yMin, size_t yMax, size_t zMin, size_t zMax);
-#if defined(COMPLEX_ENABLE_MULTICORE) || defined(NXCOMMON_ENABLE_MULTICORE)
-  NXRange3D(const tbb::blocked_range3d<size_t>& r);
+  Range2D();
+  /**
+   * @brief Creates a 2D Range where X is the fastest moving axis, and then Y
+   * @param colStart Starting Colum Index
+   * @param colEnd Ending Column Index (non inclusive)
+   * @param rowStart Starting Row Index
+   * @param rowEnd Ending row index (non inclusive)
+   */
+  Range2D(size_t colStart, size_t colEnd, size_t rowStart, size_t rowEnd);
+#ifdef NXCOMMON_ENABLE_MULTICORE
+  Range2D(const tbb::blocked_range2d<size_t, size_t>& r);
 #endif
 
   /**
@@ -73,22 +82,46 @@ public:
   RangeType getRange() const;
 
   /**
-   * @brief Returns the range along the X dimension
+   * @brief Returns the minimum row index in the range.
    * @return
    */
-  DimensionRange getXRange() const;
+  size_t minRow() const;
 
   /**
-   * @brief Returns the range along the Y dimension
+   * @brief Returns the minimum column index in the range.
    * @return
    */
-  DimensionRange getYRange() const;
+  size_t minCol() const;
 
   /**
-   * @brief Returns the range along the Z dimension
+   * @brief Returns the maximum row index in the range.
    * @return
    */
-  DimensionRange getZRange() const;
+  size_t maxRow() const;
+
+  /**
+   * @brief Returns the maximum column index in the range.
+   * @return
+   */
+  size_t maxCol() const;
+
+  /**
+   * @brief Returns the number of rows in the range.
+   * @return
+   */
+  size_t numRows() const;
+
+  /**
+   * @brief Returns the number of columns in the range.
+   * @return
+   */
+  size_t numCols() const;
+
+  /**
+   * @brief Returns the number of indices in the range.
+   * @return
+   */
+  size_t size() const;
 
   /**
    * @brief Returns true if the range is empty.  Returns false otherwise.
@@ -97,10 +130,8 @@ public:
   bool empty() const;
 
   /**
-   * @brief Returns the specified part of the range.  The range is organized as
-   * [xMin, xMax, yMin, yMax, zMin, zMax].
-   * @param index
-   * @return
+   * @brief Returns the range based on the specified index.  The range is
+   * organized as [min, max]
    */
   size_t operator[](size_t index) const;
 

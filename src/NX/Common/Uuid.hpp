@@ -4,9 +4,10 @@
 #include "NX/Common/NXCommon_export.hpp"
 #include "NX/Common/Types.hpp"
 
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <array>
+#include <functional>
 #include <optional>
 #include <string_view>
 
