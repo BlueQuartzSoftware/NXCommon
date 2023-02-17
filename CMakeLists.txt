@@ -12,7 +12,7 @@ option(NXCOMMON_ENABLE_MULTICORE "Enable multicore support" ON)
 enable_vcpkg_manifest_feature(TEST_VAR NXCOMMON_ENABLE_MULTICORE FEATURE "parallel")
 
 project(NXCommon
-  VERSION 0.1.0
+  VERSION 0.1.1
   DESCRIPTION "Common types for use in NX projects"
   HOMEPAGE_URL "https://github.com/BlueQuartzSoftware/NXCommon"
   LANGUAGES CXX
