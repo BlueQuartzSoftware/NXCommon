@@ -465,7 +465,7 @@ public:
   void byteswap()
   {
     pointer rawPtr = data();
-    for(data_type& value : *this)
+    for(value_type& value : *this)
     {
       value = NX::Common::byteswap(value);
     }
