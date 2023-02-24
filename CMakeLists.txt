@@ -121,6 +121,7 @@ set(NXCOMMON_HDRS
   ${NXCOMMON_SOURCE_DIR}/Bit.hpp
   ${NXCOMMON_SOURCE_DIR}/NXConstants.hpp
   ${NXCOMMON_SOURCE_DIR}/BoundingBox.hpp
+  ${NXCOMMON_SOURCE_DIR}/DataVector.hpp
   ${NXCOMMON_SOURCE_DIR}/EulerAngle.hpp
   ${NXCOMMON_SOURCE_DIR}/Numbers.hpp
   ${NXCOMMON_SOURCE_DIR}/Point2D.hpp
